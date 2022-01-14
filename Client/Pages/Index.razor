@@ -1,0 +1,19 @@
+﻿@page "/"
+@inject NavigationManager NM
+@using Microsoft.AspNetCore.SignalR.Client
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        HubConnection hc = new HubConnectionBuilder()
+            .WithUrl(NM.BaseUri + "test")
+            .Build();
+
+        hc.On<int, string,int>("EvoTiZbir", (broj, poruka, josJedanBroj) 
+            => Console.WriteLine($"{broj} -- {poruka} -- {josJedanBroj}"));
+
+        await hc.StartAsync();
+        await hc.SendAsync("Test", 5, 6);
+    }
+}
